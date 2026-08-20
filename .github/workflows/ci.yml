@@ -36,13 +36,6 @@ jobs:
         run: |
           docker build -t pw-observability-grafana:latest .
 
-      - name: Run Docker container
-        run: |
-          docker run -d \
-            --name pw-observability-grafana \
-            -p 8000:8000 \
-            pw-observability-grafana:latest
-
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
@@ -51,6 +44,13 @@ jobs:
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL,HIGH
+
+      - name: Run Docker container
+        run: |
+          docker run -d \
+            --name pw-observability-grafana \
+            -p 8000:8000 \
+            pw-observability-grafana:latest
 
       - name: Wait for application
         run: |
