@@ -1,6 +1,6 @@
 FROM python:3.12-slim-bookworm
 
-user appadmin
+USER appadmin
 
 WORKDIR /app
 
