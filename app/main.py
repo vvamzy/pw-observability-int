@@ -36,7 +36,7 @@ def orders():
     return {
         "orders": [
             {"id": 1, "status": "completed"},
-            {"id": 2, "status": "processing"}
+            {"id": 2, "status": "processing"},
             {"id": 3, "status": "completed"}
         ]
     }
