@@ -42,7 +42,7 @@ def orders():
     }
 
 
-@app.get("/metrics)
+@app.get("/metrics")
 def metrics():
     return Response(
         generate_latest(),
