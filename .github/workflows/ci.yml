@@ -34,14 +34,14 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t devops-observability-demo:latest .
+          docker build -t pw-observability-grafana:latest .
 
       - name: Run Docker container
         run: |
           docker run -d \
-            --name devops-observability-demo \
+            --name pw-observability-grafana \
             -p 8000:8000 \
-            devops-observability-demo:latest
+            pw-observability-grafana:latest
 
       - name: Wait for application
         run: |
@@ -57,7 +57,7 @@ jobs:
 
           echo "Application failed to start"
 
-          docker logs devops-observability-demo
+          docker logs pw-observability-grafana
 
           exit 1
 
