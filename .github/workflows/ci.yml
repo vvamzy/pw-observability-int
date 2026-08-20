@@ -43,6 +43,15 @@ jobs:
             -p 8000:8000 \
             pw-observability-grafana:latest
 
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: pw-observability-grafana:latest
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
       - name: Wait for application
         run: |
           for i in {1..30}; do
