@@ -1,4 +1,4 @@
-name: build-and-test
+name: App
 
 on:
   push:
@@ -27,10 +27,21 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Start FastAPI application
+      - name: Run Python application tests
         working-directory: app
         run: |
-          nohup uvicorn main:app --host 0.0.0.0 --port 8000 > app.log 2>&1 &
+          python -c "from main import app; print('FastAPI application loaded successfully')"
+
+      - name: Build Docker image
+        run: |
+          docker build -t devops-observability-demo:latest .
+
+      - name: Run Docker container
+        run: |
+          docker run -d \
+            --name devops-observability-demo \
+            -p 8000:8000 \
+            devops-observability-demo:latest
 
       - name: Wait for application
         run: |
@@ -45,12 +56,15 @@ jobs:
           done
 
           echo "Application failed to start"
-          cat app/app.log
+
+          docker logs devops-observability-demo
+
           exit 1
 
       - name: Test health endpoint
         run: |
           response=$(curl -sf http://localhost:8000/health)
+
           echo "$response"
 
           echo "$response" | grep '"status":"healthy"'
@@ -58,6 +72,7 @@ jobs:
       - name: Test orders endpoint
         run: |
           response=$(curl -sf http://localhost:8000/api/orders)
+
           echo "$response"
 
           echo "$response" | grep '"orders"'
@@ -65,6 +80,16 @@ jobs:
       - name: Test Prometheus metrics
         run: |
           response=$(curl -sf http://localhost:8000/metrics)
+
           echo "$response"
 
           echo "$response" | grep 'http_requests_total'
+
+      - name: Show container status
+        run: |
+          docker ps
+
+      - name: Show container logs
+        if: always()
+        run: |
+          docker logs pw-observability-grafana
