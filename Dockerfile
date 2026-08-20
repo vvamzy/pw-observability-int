@@ -1,20 +1,14 @@
-FROM python:3.10-slim
+FROM python:3.10
 
 WORKDIR /app
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
 COPY app/requirements.txt .
 
-RUN pip install --no-cache-dir --upgrade \
+RUN python -m pip install --no-cache-dir --upgrade \
     pip \
     setuptools>=78.1.1 \
-    jaraco.context>=6.1.0 \
-    wheel>=0.46.2 && \
-    pip install --no-cache-dir -r requirements.txt
+    wheel>=0.46.2 \
+    && python -m pip install --no-cache-dir -r requirements.txt
 
 COPY app/ .
 
