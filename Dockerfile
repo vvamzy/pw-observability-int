@@ -1,6 +1,6 @@
 FROM python:3.12-slim-bookworm
 
-RUN groupadd -g 1000 appadmin && \
+RUN groupadd -g 1000 appadmingrp && \
     useradd -u 1000 -g appadmingrp -m -s /bin/bash appadmin
 
 USER appadmin
