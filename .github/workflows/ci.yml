@@ -21,6 +21,10 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Remove old Docker image
+        run: |
+          docker image rm -f pw-observability-grafana:latest || true
+
       - name: Install dependencies
         working-directory: app
         run: |
