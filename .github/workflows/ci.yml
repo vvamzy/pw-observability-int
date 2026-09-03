@@ -44,6 +44,13 @@ jobs:
         run: |
           docker run --rm pw-observability-grafana python -m pip list
 
+      - name: Verify image
+        run: |
+          docker images pw-observability-grafana
+          docker run --rm pw-observability-grafana:latest python -m pip list
+          docker run --rm pw-observability-grafana:latest python -c "import msgpack, setuptools; print('msgpack:', msgpack.__version__); print('setuptools:', setuptools.__version__)"
+
+
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
         with:
