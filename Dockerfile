@@ -5,15 +5,17 @@ ENV PATH="/usr/local/bin:$PATH"
 RUN groupadd -g 1000 appadmingrp && \
     useradd -u 1000 -g appadmingrp -m -s /bin/bash appadmin
 
-USER appadmin
-
 WORKDIR /app
 
-COPY --chown=appadmin:appadmingrp app/requirements.txt .
+COPY app/requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN python -m pip install --no-cache-dir \
+    --upgrade pip setuptools wheel && \
+    python -m pip install --no-cache-dir -r requirements.txt
 
-COPY app/ .
+COPY --chown=appadmin:appadmingrp app/ .
+
+USER appadmin
 
 EXPOSE 8000
 
